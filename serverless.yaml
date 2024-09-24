@@ -1,0 +1,33 @@
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: health
+service: hackathon-fiap
+
+plugins:
+  - serverless-jetpack
+  - serverless-offline
+  - serverless-optimize
+
+package:
+  patterns:
+    - '!.git/**'
+    - '!test/**'
+    - '!e2e/**'
+    - '!src/**'
+    - '!node_modules/**'
+  individually: true
+  excludeDevDependencies: true
+  exclude:
+    - node_modules/**
+  
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1 # or whatever your region is
+
+functions:
+  api:
+    handler: dist/lambda.handler
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
